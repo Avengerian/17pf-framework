@@ -4,16 +4,16 @@
 //exits if Orbat is disabled in init.sqf or briefing phase is done
 sleep 1;
 if (isServer) exitWith {systemChat "Orbat is functioning, but disabled for singleplayer testing and non-dedicated servers."};
-if (isNil "briefingPhase" || briefingPhase == false) exitWith {};
+if (isNil "briefingPhase" || {!briefingPhase}) exitWith {};
 
 [ACE_player, currentWeapon ACE_player, true] call ace_safemode_fnc_setWeaponSafety;
 
 [] spawn {
 	// SET THE RADIO SETTING HERE | 1 = First squad is last channel in list. 2 = First squad is CH1. 3 = No CH set for any squad.
-	_radioSetting = 1;
+	private _radioSetting = 1;
 	/////////////////////////////////////
-	_radioFreq = "Not Set"; // Debug value
-	_initialRole = (roleDescription player) splitString "@" select 0;
+	private _radioFreq = "Not Set"; // Debug value
+	private _initialRole = (roleDescription player) splitString "@" select 0;
 	player setVariable ["loadoutRole", _initialRole];
 	while {briefingPhase} do {
 		// recalc every 5 seconds to adjust for updates/changes 
@@ -25,7 +25,8 @@ if (isNil "briefingPhase" || briefingPhase == false) exitWith {};
 		private _opName = briefingName; 
 		private _terrain = worldName;
 		private _currentTime = systemTime apply {if (_x < 10) then {"0" + str _x} else {str _x}};
-		private _hours = _currentTime select 3; _minutes = _currentTime select 4;
+		private _hours = _currentTime select 3;
+		private _minutes = _currentTime select 4;
 		private _timeSys = _hours + ":" + _minutes;
 		private _timeSinceBriefingStart = time - briefingStartTime;
 		private _briefTime = (_timeSinceBriefingStart / 60) toFixed 0;
@@ -36,9 +37,9 @@ if (isNil "briefingPhase" || briefingPhase == false) exitWith {};
 
 		switch (_radioSetting) do {
 			case 1: { // Sets first squad to be last channel
-				_playableGroups = [];        
+				private _playableGroups = [];
 				{
-				_group = group _x;
+				private _group = group _x;
 				if !(_group in _playableGroups) then {
 					_playableGroups set [count _playableGroups,_group];
 				}
@@ -51,9 +52,9 @@ if (isNil "briefingPhase" || briefingPhase == false) exitWith {};
 				_radioFreq = _groupNum;
 			};
 			case 2: { // Set the radio freq based on the literal group number
-				_playableGroups = [];        
+				private _playableGroups = [];
 				{
-				_group = group _x;
+				private _group = group _x;
 				if !(_group in _playableGroups) then {
 					_playableGroups set [count _playableGroups,_group];
 				}
