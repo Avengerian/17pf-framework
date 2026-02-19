@@ -50,7 +50,8 @@ _unitsArr = call CBA_fnc_players;
 		// 	default{ _strRank = "Pvt. "; };
 		// };
 
-		_strRole = " - " + (roleDescription _x);
+		private _rr = _x getVariable ["17pfRosterRoles",""]; 
+		_strRole = " - " + (if (_rr != "") then {_rr} else {roleDescription _x});
 		_strRole = _strRole splitString "@" select 0;
 
         if(_newGrp != _oldGrp) then {
